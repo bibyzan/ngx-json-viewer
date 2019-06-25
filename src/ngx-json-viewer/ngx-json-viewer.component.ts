@@ -103,12 +103,12 @@ export class NgxJsonViewerComponent implements OnChanges {
           segment.description = 'null';
         } else if (Array.isArray(segment.value)) {
           segment.type = 'array';
-          segment.description = 'Array[' + segment.value.length + '] ' + safeStringify(segment.value);
+          segment.description = 'Array[' + segment.value.length + '] ' + this.safeStringify(segment.value);
         } else if (segment.value instanceof Date) {
           segment.type = 'date';
         } else {
           segment.type = 'object';
-          segment.description = 'Object ' + safeStringify(segment.value);
+          segment.description = 'Object ' + this.safeStringify(segment.value);
         }
         break;
       }
