@@ -47,6 +47,22 @@ export class NgxJsonViewerComponent implements OnChanges {
       segment.expanded = !segment.expanded;
     }
   }
+  
+  safeStringify(obj) {
+    const getCircularReplacer = () => {
+      const seen = new WeakSet();
+      return (key, value) => {
+        if (typeof value === "object" && value !== null) {
+          if (seen.has(value)) {
+            return;
+          }
+          seen.add(value);
+        }
+        return value;
+      };
+    };
+    JSON.stringify(obj, getCircularReplacer());
+  }
 
   private parseKeyValue(key: any, value: any): Segment {
     const segment: Segment = {
@@ -87,12 +103,12 @@ export class NgxJsonViewerComponent implements OnChanges {
           segment.description = 'null';
         } else if (Array.isArray(segment.value)) {
           segment.type = 'array';
-          segment.description = 'Array[' + segment.value.length + '] ' + JSON.stringify(segment.value);
+          segment.description = 'Array[' + segment.value.length + '] ' + safeStringify(segment.value);
         } else if (segment.value instanceof Date) {
           segment.type = 'date';
         } else {
           segment.type = 'object';
-          segment.description = 'Object ' + JSON.stringify(segment.value);
+          segment.description = 'Object ' + safeStringify(segment.value);
         }
         break;
       }
